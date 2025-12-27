@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.FPS.Game;
 using UnityEngine;
 using UnityEngine.Events;
@@ -92,6 +92,7 @@ namespace Unity.FPS.Gameplay
         float m_TimeStartedWeaponSwitch;
         WeaponSwitchState m_WeaponSwitchState;
         int m_WeaponSwitchNewWeaponIndex;
+        private int m_PreviousWeaponIndex = -1;
 
         void Start()
         {
@@ -171,6 +172,10 @@ namespace Unity.FPS.Gameplay
                         if (GetWeaponAtSlotIndex(switchWeaponInput - 1) != null)
                             SwitchToWeaponIndex(switchWeaponInput - 1);
                     }
+                    else if (m_InputHandler.GetSwitchToPreviousWeaponInput()) // NEW
+                    {
+                        SwitchToPreviousWeapon();
+                    }
                 }
             }
 
@@ -240,6 +245,9 @@ namespace Unity.FPS.Gameplay
         {
             if (force || (newWeaponIndex != ActiveWeaponIndex && newWeaponIndex >= 0))
             {
+                // Store the current weapon index as the previous weapon index
+                m_PreviousWeaponIndex = ActiveWeaponIndex;
+
                 // Store data related to weapon switching animation
                 m_WeaponSwitchNewWeaponIndex = newWeaponIndex;
                 m_TimeStartedWeaponSwitch = Time.time;
@@ -554,6 +562,14 @@ namespace Unity.FPS.Gameplay
             if (newWeapon != null)
             {
                 newWeapon.ShowWeapon(true);
+            }
+        }
+
+        public void SwitchToPreviousWeapon()
+        {
+            if (m_PreviousWeaponIndex != -1 && GetWeaponAtSlotIndex(m_PreviousWeaponIndex) != null)
+            {
+                SwitchToWeaponIndex(m_PreviousWeaponIndex);
             }
         }
     }
