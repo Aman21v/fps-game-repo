@@ -1,1 +1,1 @@
-its a game about fps shooting one player. This repository contains a basic FPS game build in Unity.
+its a game about fps shooting one player. This repository contains a basic FPS game build in Unity. The background music is a wind ambience.
